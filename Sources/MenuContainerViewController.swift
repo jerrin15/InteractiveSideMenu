@@ -30,6 +30,8 @@ open class MenuContainerViewController: UIViewController {
     fileprivate weak var currentContentViewController: UIViewController?
     fileprivate var navigationMenuTransitionDelegate: MenuTransitioningDelegate!
 
+    public var isClearMenuContainer = false
+
     /**
      Flag indicating if the side menu is being shown.
      */
@@ -46,6 +48,12 @@ open class MenuContainerViewController: UIViewController {
      */
     public var menuViewController: MenuViewController! {
         didSet {
+            
+            if isClearMenuContainer
+            {
+                return
+            }
+
             if menuViewController == nil {
                 fatalError("Invalid `menuViewController` value. It should not be nil")
             }
@@ -106,7 +114,7 @@ open class MenuContainerViewController: UIViewController {
 
         let viewBounds = CGRect(x:0, y:0, width:size.width, height:size.height)
         let viewCenter = CGPoint(x:size.width/2, y:size.height/2)
-        coordinator.animate(alongsideTransition: { _ in
+        coordinator.animate(alongsideTransition: {[unowned self] _ in
             if self.menuViewController == nil {
                 fatalError("Invalid `menuViewController` value. It should not be nil")
             }
